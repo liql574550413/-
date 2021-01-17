@@ -1,5 +1,7 @@
 package com.li.linkedlist;
 
+import java.util.Stack;
+
 /**
  * @author liql
  * @date 2021/1/10
@@ -83,6 +85,37 @@ public class SingleLinkedListDemo {
     }
 
     /**
+     * 单链表的反转【腾讯面试题】
+     * 思路:
+     * 1.先定义-一个节点reverseHead =new HeroNode(;
+     * 2从头到尾追历原来的链表，每遍历一个节点，就将其取出，并放在新的链表reverseHead的最前端，
+     * 3.原来的链表的head.next =reverseHead.next
+     */
+    public static void reverseList(HeroNode head){
+        //如果当前链表为空，或者只有一个节点，无需反转，直接返回
+        if (head.next==null||head.next.next==null){
+            return;
+        }
+
+        //定义一个辅助的指针(变量)，帮助我们遍历原来的链表
+        HeroNode cur=head.next;
+        HeroNode next2=null;//做标记用 用来指向当前节点的下一个节点
+        HeroNode reversehead=new HeroNode(0, "", "");
+        //遍历原来的链表，每遍历一个节点，就将其取出，并放在新的链表reverseHead的最前端
+        //动脑筋
+        while (cur!=null){
+            //next先暂时保存当前节点的下一个节点 因为 后面要把当前节点后移操作用
+            next2=cur.next;
+            cur.next=reversehead.next;//将cur的下一个节点指向新的链表的最前端
+
+            reversehead.next=cur;//将当前节点连接到新链表头结点后方
+            cur=next2;//让当前节点后移。
+        }
+        //将head.next指向reverseHead.next, 实现单链表的反转
+        head.next=reversehead.next;
+    }
+
+    /**
      *  //方法:获取到单链表的节点的个数(如果是带头结点的链表，需求不统计头节点)
      * @param head 链表的头结点
      * @return  链表的有效节点个数
@@ -101,6 +134,34 @@ public class SingleLinkedListDemo {
         }
         return length;
     }
+
+    /**
+     * 从尾到头打印单链表[百度， 要求方式1:反向遍历
+     * 方式2: Stack 栈  具有先进出的特点
+     * 思路
+     * 1..上面的题的要求就是逆序打印单链表.
+     * 2.方式1:先将单链表进行反转操作，然后再遍历即可，这样的做的问题是会破坏原来的单链表的结构，不建议
+     * 3.方式2:可以利用栈这个数据结构，将各个节点压入到栈中,然后利用栈的先进后出的特点，就实现了逆序打印的效果.
+     * 举例演示栈的使用stack
+     */
+    public void reversePrint(HeroNode head){
+        //判断链表是否为空
+        if (head.next==null){return;}
+
+        //创建一个栈  给各个节点压入栈中
+        Stack<HeroNode> stack=new Stack<>();
+        HeroNode cur=head.next;
+        //将链表的所有节点压入栈中
+        while (cur!=null){
+            stack.push(cur);
+            cur=cur.next;//后移
+        }
+    }
+
+
+   // 作业 5)合 并两个有序的单链表，合并之后的链表依然有序[课后练习.]
+
+
 }
 
 //定义SingleLinkedList管理我们的英雄
