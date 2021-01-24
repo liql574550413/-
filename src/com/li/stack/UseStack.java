@@ -6,6 +6,7 @@ import java.util.Stack;
  * @author liql
  * @date 2021/1/17
  * 演示栈的使用
+ * 先入后出
  */
 public class UseStack {
     public static void main(String[] args){
