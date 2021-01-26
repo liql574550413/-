@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class Calculator {
     public static void main(String[] args){
         //完成表达式的运算
-        String expression="4+2*6-2";
+        String expression="400+2*6-2";
         //创建两个栈  数栈 和一个 符号栈
         ArrayStack2 numStack = new ArrayStack2(10);
         ArrayStack2 operStack=  new ArrayStack2(10);
@@ -34,6 +34,7 @@ public class Calculator {
         int oper=0;
         int res=0;
         char ch=' ';//将每次扫描到的char保存到ch
+        String  keepNum="";//用来处理多位数 ，拼接多个数字
         //开始while循环扫描expression
         while (true){
             //一次得到每个expression字符
@@ -60,9 +61,23 @@ public class Calculator {
                 }else {//当前符号栈为空  直接入符号栈
                     operStack.push(ch);
                 }
-            }else { //当前扫描的结果是数字  直接入数栈
+            }else { //当前扫描的结果是数字  直接入数栈  这个适用于每个数字都是单位的情况
                 //注意 这时候的是字符型的数字  所以要转化成数字型的 数字，ascII码相差48
-                numStack.push(ch-48);
+              //  numStack.push(ch-48);
+
+                //处理多位数的情况 每次循环标会把多位数拼接在一起
+                keepNum=keepNum+ch;
+                //先判断是不是最后一个数
+                if (index==expression.length()-1){
+                    numStack.push(ch-48);//当是最后一个数字时直接入栈
+                }else {
+                    //当后面还有数字或者符号时
+                    //判断下一个字符是数字还是运算符,如果是运算符则直接入栈
+                    if (operStack.isOper(expression.substring(index+1, index+2).charAt(0))){
+                        numStack.push(Integer.valueOf(keepNum));
+                        keepNum="";//清空  不然下次判断时该符号不为空 会出错
+                    }
+                }
             }
             //让index +1 ，并判断是否扫码到expression最后
             index++;
